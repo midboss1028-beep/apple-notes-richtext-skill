@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "apple-notes-richtext-skill"
+version = "0.1.0"
+description = "An agent-oriented macOS CLI and skill for writing UTF-8 rich-text Markdown or HTML into Apple Notes."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "apple-notes-richtext-skill contributors" }]
+dependencies = [
+  "markdown>=3.6",
+  "typer>=0.12",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+
+[project.scripts]
+anote = "anote.cli:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["anote"]

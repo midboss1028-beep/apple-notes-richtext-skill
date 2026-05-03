@@ -30,7 +30,7 @@ def markdown_to_body_html(source: str) -> str:
     """Convert Markdown text to HTML body markup."""
     return markdown_lib.markdown(
         source,
-        extensions=["fenced_code", "nl2br", "sane_lists"],
+        extensions=["fenced_code", "nl2br", "sane_lists", "tables"],
         output_format="html5",
     )
 

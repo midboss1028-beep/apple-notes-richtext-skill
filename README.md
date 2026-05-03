@@ -28,7 +28,7 @@ Many agents can already write to Apple Notes through generic CLIs or ad-hoc Appl
 ## Advantages
 
 - **Agent-first**: designed for AI agents that generate long Markdown notes.
-- **Rich text**: preserves headings, paragraphs, lists, bold, italic, inline code, fenced code blocks, and links.
+- **Rich text**: preserves headings, paragraphs, tables, lists, bold, italic, inline code, fenced code blocks, and links.
 - **UTF-8 safe**: all file reads/writes are explicit UTF-8.
 - **AppleScript safe**: note body is never passed as a shell argument or embedded inside `osascript -e`.
 - **Debuggable**: `--dry-run` prints final HTML without opening Notes or creating a note.
@@ -202,7 +202,7 @@ Rules:
 - Avoid echoing sensitive note content back to the user unless asked.
 - If permissions fail, tell the user to grant Automation permission for Terminal/Python/the agent runtime to control Notes.app.
 
-Supported formatting: headings, paragraphs, real line breaks, unordered lists, ordered lists, bold, italic, inline code, fenced code blocks, and links.
+Supported formatting: headings, paragraphs, real line breaks, tables, unordered lists, ordered lists, bold, italic, inline code, fenced code blocks, and links.
 Not supported in v1: native checklist items, images, attachments, search, append, update, and delete.
 ```
 
@@ -221,7 +221,7 @@ AppleScript receives only file paths, reads them with UTF-8, then creates the no
 make new note with properties {name:titleText, body:htmlText}
 ```
 
-Markdown conversion uses `fenced_code`, `sane_lists`, and `nl2br`, so empty lines become paragraphs and real line breaks inside a paragraph become `<br>`.
+Markdown conversion uses `fenced_code`, `tables`, `sane_lists`, and `nl2br`, so empty lines become paragraphs and real line breaks inside a paragraph become `<br>`.
 
 ## Supported Markdown
 
@@ -234,9 +234,10 @@ Markdown conversion uses `fenced_code`, `sane_lists`, and `nl2br`, so empty line
 - Italic
 - Inline code
 - Fenced code blocks
+- Tables
 - Links
 
-Apple Notes decides final rendering. Blockquotes, horizontal rules, tables, and nested formatting may be simplified.
+Apple Notes decides final rendering. Blockquotes, horizontal rules, and nested formatting may be simplified.
 
 ## Project Structure
 
@@ -272,7 +273,7 @@ pytest
 - macOS only.
 - Creates new notes only.
 - Does not support native Apple Notes checklist items.
-- Does not support images, attachments, or complex tables.
+- Does not support images, attachments, or complex tables (simple tables with `tables` extension are supported).
 - Does not support search, append, update, or delete yet.
 - Folder must already exist; v1 does not auto-create folders.
 - First run may require macOS Automation permission.
@@ -285,7 +286,7 @@ pytest
 - `anote update`
 - Optional folder creation
 - MCP server for direct agent tool use
-- Better Markdown tables/task-list support
+- Better task-list support
 - Image and attachment support
 
 ## License
@@ -324,7 +325,7 @@ MIT
 ## 优势
 
 - **Agent-first**：专门为 Agent 生成长 Markdown 笔记设计。
-- **富文本**：保留标题、段落、列表、粗体、斜体、行内代码、代码块和链接。
+- **富文本**：保留标题、段落、表格、列表、粗体、斜体、行内代码、代码块和链接。
 - **UTF-8 安全**：所有文件读写都显式使用 UTF-8。
 - **AppleScript 安全**：正文不通过 shell 参数传递，也不嵌入 `osascript -e`。
 - **易调试**：`--dry-run` 只输出最终 HTML，不打开 Notes，也不创建笔记。
@@ -498,7 +499,7 @@ cp skills/anote/SKILL.md ~/.claude/skills/anote/SKILL.md
 - 除非用户明确要求，不要在回复里复述敏感笔记正文。
 - 如果权限失败，提醒用户在 macOS 系统设置中允许 Terminal/Python/Agent runtime 控制 Notes.app。
 
-支持格式：标题、段落、真实换行、无序列表、有序列表、粗体、斜体、行内代码、代码块、链接。
+支持格式：标题、段落、真实换行、**表格**、无序列表、有序列表、粗体、斜体、行内代码、代码块、链接。
 v1 不支持：原生 checklist、图片、附件、搜索、追加、更新和删除。
 ```
 
@@ -517,7 +518,7 @@ AppleScript 只接收文件路径，用 UTF-8 读取后创建笔记：
 make new note with properties {name:titleText, body:htmlText}
 ```
 
-Markdown 转换启用了 `fenced_code`、`sane_lists` 和 `nl2br`，所以空行会形成段落，同一段里的真实换行会变成 `<br>`。
+Markdown 转换启用了 `fenced_code`、`tables`、`sane_lists` 和 `nl2br`，所以空行会形成段落，同一段里的真实换行会变成 `<br>`。
 
 ## 支持的 Markdown
 
@@ -530,9 +531,10 @@ Markdown 转换启用了 `fenced_code`、`sane_lists` 和 `nl2br`，所以空行
 - 斜体
 - 行内代码
 - 代码块
+- **表格**
 - 链接
 
-最终渲染由 Apple Notes 决定。引用、分隔线、表格、复杂嵌套格式可能会被简化。
+最终渲染由 Apple Notes 决定。引用、分隔线、复杂嵌套格式可能会被简化。
 
 ## 项目结构
 
@@ -568,7 +570,7 @@ pytest
 - 仅支持 macOS。
 - 目前只创建新笔记。
 - 不支持 Apple Notes 原生 checklist。
-- 不支持图片、附件、复杂表格。
+- 不支持图片、附件、复杂表格（基础表格已支持）。
 - 暂不支持搜索、追加、更新、删除。
 - 文件夹必须已存在，v1 不会自动创建文件夹。
 - 第一次运行可能需要 macOS Automation 权限。
@@ -581,7 +583,7 @@ pytest
 - `anote update`
 - 可选自动创建文件夹
 - 面向 Agent 工具调用的 MCP server
-- 更好的 Markdown 表格和任务列表支持
+- 更好的任务列表（checklist）支持
 - 图片和附件支持
 
 ## 许可证
